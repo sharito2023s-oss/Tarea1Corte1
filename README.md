@@ -1,65 +1,44 @@
-✅ Ítems desarrollados
-1. Modificación de la función mover_robot
+# 🤖 Tarea 1 – Simulador de Robot con Estrategias
 
-Se implementó la lógica para que:
+Este repositorio contiene el desarrollo de un simulador de un robot que se desplaza en una cuadrícula **3x3**, con **batería limitada** y un sistema de **recompensas/castigos**.  
+El objetivo es llegar a la posición `(2,2)` optimizando el recorrido y la gestión de batería.  
 
-Cada movimiento consuma 1 unidad de batería.
+---
 
-El robot solo pueda moverse si tiene batería > 0.
+## ✅ Ítems desarrollados
 
-La acción recargar restablece la batería a 5.
+### 1. Modificación de la función `mover_robot`  
+- Cada movimiento consume **1 unidad de batería**.  
+- El robot solo puede moverse si la batería > 0.  
+- La acción `recargar` restaura la batería a 5.  
 
-2. Restricción por batería
+### 2. Restricción por batería  
+- Si la batería llega a **0**, el robot **no se mueve** hasta recargar.  
 
-Si la batería llega a 0, el robot no puede moverse hasta recargar.
+### 3. Sistema de recompensas y castigos (`recompensa`)  
+- `+5` → por recargar.  
+- `-1` → por moverse normalmente.  
+- `-5` → por intentar moverse sin batería.  
+- `+20` → bonus por llegar al objetivo en ≤ 5 pasos.  
+- `+15` → si llega al objetivo con batería ≥ 3.  
+- `+10` → si llega con batería baja.  
+- `-3` → si supera 8 pasos sin alcanzar el objetivo.  
 
-3. Sistema de recompensas y castigos (recompensa)
+### 4. Estrategias implementadas
+Se probaron diferentes estrategias:  
+- **Aleatoria** → elige movimientos o recargar al azar.  
+- **Codiciosa hacia el objetivo** → prioriza llegar a `(2,2)` recargando solo si es necesario.  
+- **Conservadora** → recarga cuando la batería ≤ 2, de lo contrario avanza hacia adelante/derecha.  
 
-Castigo por intentar moverse sin batería: -5 puntos.
+---
 
-Costo por moverse normalmente: -1 punto.
+## 🗺️ Representación de la cuadrícula (3x3)
 
-Recompensa por recargar: +5 puntos.
-
-Bonus por llegar al objetivo en ≤ 5 pasos: +20 puntos.
-
-Recompensa por llegar con batería ≥ 3: +15 puntos.
-
-Recompensa por llegar con batería baja: +10 puntos.
-
-Castigo adicional si se exceden 8 pasos sin lograr el objetivo: -3 puntos.
-
-4. Estrategias de movimiento implementadas
-
-Se probaron distintas formas de decisión:
-
-Aleatoria → elige cualquier acción al azar.
-
-Codiciosa hacia el objetivo → prioriza avanzar hacia (2,2).
-
-Conservadora → recarga cuando la batería ≤ 2, de lo contrario se mueve hacia adelante/derecha.
-
-🚀 Ejecución
-
-Para ejecutar el programa:
-
-python main.py
-
-
-Al correrlo, se obtendrán simulaciones con las tres estrategias, mostrando:
-
-Acción tomada.
-
-Estado del robot (posición, batería, pasos).
-
-Recompensa obtenida.
-
-Recompensa total al final.
-
-📊 Ejemplo de salida en consola
-=== Simulación con Codiciosa hacia el objetivo ===
-Paso 1: Acción=adelante, Estado={'posicion': (1, 0), 'bateria': 4, 'objetivo_alcanzado': False, 'pasos': 1}, Recompensa=-1
-Paso 2: Acción=adelante, Estado={'posicion': (2, 0), 'bateria': 3, 'objetivo_alcanzado': False, 'pasos': 2}, Recompensa=-1
-Paso 3: Acción=derecha, Estado={'posicion': (2, 1), 'bateria': 2, 'objetivo_alcanzado': False, 'pasos': 3}, Recompensa=-1
-Paso 4: Acción=derecha, Estado={'posicion': (2, 2), 'bateria': 1, 'objetivo_alcanzado': True, 'pasos': 4}, Recompensa=20
-Recompensa total con Codiciosa hacia el objetivo: 17
+```text
++---+---+---+
+| R |   |   |   ← (0,0) posición inicial
++---+---+---+
+|   |   |   |
++---+---+---+
+|   |   | G |   ← (2,2) objetivo
++---+---+---+
